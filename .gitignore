@@ -1,0 +1,31 @@
+# Binaries / build output
+*.exe
+*.dll
+*.sys
+*.bin
+*.shellcode
+*.dmp
+
+# C / Visual Studio
+.vs/
+x64/
+Debug/
+Release/
+*.obj
+*.pdb
+*.ilk
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Rust
+target/
+
+# Editors / OS
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini
