@@ -68,6 +68,20 @@ Veja **[lab/setup.md](lab/setup.md)** — VM Windows isolada, snapshots por est�
 - [ ] PoC: module stomping / mapping injection
 - [ ] Comparativo final: técnica × privilégio × estabilidade × artefatos
 
+## Visualizações
+
+<p align="center">
+  <img src="docs/assets/attack-coverage.png" alt="Cobertura MITRE ATT&CK por módulo" width="70%">
+</p>
+
+<p align="center">
+  <img src="docs/assets/technique-comparison.png" alt="Comparativo das técnicas de injeção" width="90%">
+</p>
+
+<p align="center">
+  <img src="docs/assets/roadmap-status.png" alt="Status do roadmap" width="45%">
+</p>
+
 ## Referências
 
 - [MITRE ATT&CK — Process Injection (T1055)](https://attack.mitre.org/techniques/T1055/)
