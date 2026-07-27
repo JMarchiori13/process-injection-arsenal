@@ -1,18 +1,18 @@
-# src/remote-thread — PoCs de Remote Thread Injection
+# src/remote-thread — Remote Thread Injection PoCs
 
-📖 Notas de pesquisa: [docs/remote-thread.md](../../docs/remote-thread.md)
+📖 Research notes: [docs/remote-thread.md](../../docs/remote-thread.md)
 
-## Experimentos planejados
+## Planned experiments
 
-| # | Experimento | API | Observação |
+| # | Experiment | API | Note |
 |---|---|---|---|
-| R1 | Injeção clássica completa | `VirtualAllocEx` + `WriteProcessMemory` + `CreateRemoteThread` | Baseline de comparação |
-| R2 | Mesmo fluxo via Native API | `NtAllocateVirtualMemory` + `NtWriteVirtualMemory` + `NtCreateThreadEx` | Comparar telemetria com R1 |
-| R3 | Variante `RtlCreateUserThread` | Native | Documentar diferenças de comportamento |
+| R1 | Full classic injection | `VirtualAllocEx` + `WriteProcessMemory` + `CreateRemoteThread` | Comparison baseline |
+| R2 | Same flow via Native API | `NtAllocateVirtualMemory` + `NtWriteVirtualMemory` + `NtCreateThreadEx` | Compare telemetry with R1 |
+| R3 | `RtlCreateUserThread` variant | Native | Document behavior differences |
 
-## Convenções
+## Conventions
 
-- Linguagem: C (MSVC, x64)
-- Alvo: processo dummy do lab (ver [lab/setup.md](../../lab/setup.md))
-- Payload: MessageBox padrão do projeto
-- Logging verboso de cada chamada (handle, endereço alocado, bytes escritos, thread ID)
+- Language: C (MSVC, x64)
+- Target: lab dummy process (see [lab/setup.md](../../lab/setup.md))
+- Payload: project-standard MessageBox
+- Verbose logging of every call (handle, allocated address, bytes written, thread ID)

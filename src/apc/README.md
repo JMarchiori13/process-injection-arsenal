@@ -1,17 +1,17 @@
-# src/apc — PoCs de APC Injection
+# src/apc — APC Injection PoCs
 
-📖 Notas de pesquisa: [docs/apc-injection.md](../../docs/apc-injection.md)
+📖 Research notes: [docs/apc-injection.md](../../docs/apc-injection.md)
 
-## Experimentos planejados
+## Planned experiments
 
-| # | Experimento | Alvo | Observação |
+| # | Experiment | Target | Note |
 |---|---|---|---|
-| A1 | `QueueUserAPC` em thread alertável | Thread do dummy com `SleepEx(INFINITE, TRUE)` | Validar dependência de estado alertável |
-| A2 | Early bird APC | Processo criado suspenso pela própria PoC | Execução garantida no resume |
-| A3 | `NtQueueApcThread` | Mesmo cenário de A1, via Native API | Comparar com A1 |
+| A1 | `QueueUserAPC` on an alertable thread | Dummy thread with `SleepEx(INFINITE, TRUE)` | Validate alertable-state dependency |
+| A2 | Early bird APC | Process created suspended by the PoC itself | Guaranteed execution on resume |
+| A3 | `NtQueueApcThread` | Same scenario as A1, via Native API | Compare with A1 |
 
-## Convenções
+## Conventions
 
-- Linguagem: C (MSVC, x64)
-- Payload: MessageBox padrão do projeto
-- Em A2, o "processo alvo" é o binário dummy do lab criado com `CREATE_SUSPENDED`
+- Language: C (MSVC, x64)
+- Payload: project-standard MessageBox
+- In A2, the "target process" is the lab dummy binary created with `CREATE_SUSPENDED`

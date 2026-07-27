@@ -1,23 +1,23 @@
-# Contribuindo
+# Contributing
 
-Contribuições são bem-vindas **dentro do escopo do projeto**: pesquisa de process injection documentada, PoCs de laboratório e correções nas notas técnicas.
+Contributions are welcome **within the project scope**: documented process injection research, lab PoCs, and fixes to the technical notes.
 
-## Regras
+## Rules
 
-1. **Somente material de laboratório.** Payload padrão do projeto é a MessageBox inofensiva — não substitua por payloads reais.
-2. **Toda PoC precisa de doc.** Cada implementação em `src/` deve vir acompanhada de nota em `docs/` explicando a técnica, pré-requisitos e comportamento esperado.
-3. **Sem ofuscação/evasão.** As PoCs são didáticas: logging verboso, sem anti-analysis. Evasão de EDR está fora do escopo deste repositório.
-4. **Não commite binários.** O `.gitignore` já cobre `.exe`, `.dll` e shellcode compilado — respeite-o.
+1. **Lab material only.** The project's standard payload is the harmless MessageBox — do not replace it with real payloads.
+2. **Every PoC needs documentation.** Each implementation in `src/` must ship with a note in `docs/` explaining the technique, prerequisites, and expected behavior.
+3. **No obfuscation/evasion.** PoCs are educational: verbose logging, no anti-analysis. EDR evasion is out of scope for this repository.
+4. **Do not commit binaries.** The `.gitignore` already covers `.exe`, `.dll`, and compiled shellcode — respect it.
 
-## Processo
+## Process
 
-1. Abra uma issue descrevendo a técnica/módulo
-2. Fork → branch `feat/<modulo>-<tecnica>`
-3. PR com referência à issue e resultado do experimento de lab
+1. Open an issue describing the technique/module
+2. Fork → branch `feat/<module>-<technique>`
+3. PR referencing the issue, including the lab experiment result
 
-## Padrões
+## Standards
 
-- Linguagem das PoCs: C (MSVC) — logging verboso em cada etapa
-- Notas em português ou inglês (consistência dentro do arquivo)
-- Técnicas mapeadas para MITRE ATT&CK (técnica + sub-técnica)
-- Tabelas para comparação de métodos
+- PoC language: C (MSVC) — verbose logging at every step
+- Notes in English (keep it consistent within each file)
+- Techniques mapped to MITRE ATT&CK (technique + sub-technique)
+- Tables for method comparisons

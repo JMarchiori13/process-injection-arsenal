@@ -1,39 +1,39 @@
 # T1055 — Thread Hijacking
 
-Redirecionar o fluxo de execução de uma thread existente do processo alvo, em vez de criar thread nova.
+Redirecting the execution flow of an existing thread in the target process instead of creating a new thread.
 
-## Fluxo conceitual
+## Conceptual flow
 
 ```
-OpenThread(thread do alvo, THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_SET_CONTEXT)
+OpenThread(target thread, THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_SET_CONTEXT)
   └─ SuspendThread
-       └─ GetThreadContext          (captura RIP/RSP e registradores)
-            ├─ VirtualAllocEx + WriteProcessMemory (shellcode no alvo)
+       └─ GetThreadContext          (capture RIP/RSP and registers)
+            ├─ VirtualAllocEx + WriteProcessMemory (shellcode in the target)
             └─ SetThreadContext      (RIP = shellcode)
-                 └─ ResumeThread     (thread retoma no shellcode)
+                 └─ ResumeThread     (thread resumes into the shellcode)
 ```
 
-## Características
+## Characteristics
 
-| Aspecto | Detalhe |
+| Aspect | Detail |
 |---|---|
-| Criação de thread | Não — reutiliza thread existente |
-| Escolha da thread | Threads do próprio alvo; preferir threads em wait estável |
-| Estabilidade | Fragiliza o alvo se o contexto for restaurado incorretamente; PoC deve salvar/restaurar registradores |
-| Variantes | Hijack com retorno ao fluxo original (stub que restaura contexto) vs. hijack destrutivo |
+| Thread creation | None — reuses an existing thread |
+| Thread selection | Threads of the target itself; prefer threads in a stable wait |
+| Stability | Destabilizes the target if the context is restored incorrectly; the PoC must save/restore registers |
+| Variants | Hijack with return to the original flow (context-restoring stub) vs. destructive hijack |
 
-## Pré-requisitos
+## Prerequisites
 
-- Handle de thread com os direitos acima (mesmo contexto ou `SeDebugPrivilege`)
-- Cuidado com arquitetura (Wow64 muda a estrutura de CONTEXT)
+- A thread handle with the rights above (same context or `SeDebugPrivilege`)
+- Watch the architecture (Wow64 changes the CONTEXT structure)
 
-## Artefatos observáveis
+## Observable artifacts
 
-- Sysmon: Event ID 10 (ProcessAccess/ThreadAccess) — sem Event ID 8
-- Thread com call stack anômala (instrução atual fora de módulo)
-- Suspend/resume de thread por processo externo
+- Sysmon: Event ID 10 (ProcessAccess/ThreadAccess) — no Event ID 8
+- Thread with an anomalous call stack (current instruction outside a module)
+- Thread suspend/resume by an external process
 
-## Notas de lab
+## Lab notes
 
-- Alvo: thread secundária do processo dummy em `WaitForSingleObject`
-- Validar com x64dbg anexado ao alvo: stepping do hijack instrução a instrução
+- Target: a secondary dummy-process thread in `WaitForSingleObject`
+- Validate with x64dbg attached to the target: step through the hijack instruction by instruction

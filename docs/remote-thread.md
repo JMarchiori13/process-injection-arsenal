@@ -1,36 +1,36 @@
 # T1055 — Remote Thread Injection
 
-A técnica clássica de injeção em processo remoto. Base de comparação para todas as demais.
+The classic remote process injection technique. The comparison baseline for all others.
 
-## Fluxo conceitual
+## Conceptual flow
 
 ```
-OpenProcess(alvo, PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_CREATE_THREAD)
-  └─ VirtualAllocEx(alvo, PAGE_EXECUTE_READWRITE)
-       └─ WriteProcessMemory(alvo, shellcode)
-            └─ CreateRemoteThread(alvo, entrypoint = shellcode)
+OpenProcess(target, PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_CREATE_THREAD)
+  └─ VirtualAllocEx(target, PAGE_EXECUTE_READWRITE)
+       └─ WriteProcessMemory(target, shellcode)
+            └─ CreateRemoteThread(target, entrypoint = shellcode)
 ```
 
-## Variantes documentadas
+## Documented variants
 
-| Variante | Diferença | Observações |
+| Variant | Difference | Notes |
 |---|---|---|
-| `CreateRemoteThread` | WinAPI padrão | Mais monitorada; cadeia completa visível em telemetria |
-| `NtCreateThreadEx` | Native API | Mesma operação via `ntdll.dll`, contorna hooks em user-mode da camada WinAPI |
-| `RtlCreateUserThread` | Native, estável | Usada internamente pelo CSRSS; alternativa documentada |
+| `CreateRemoteThread` | Standard WinAPI | Most monitored; full chain visible in telemetry |
+| `NtCreateThreadEx` | Native API | Same operation via `ntdll.dll`, bypasses user-mode hooks at the WinAPI layer |
+| `RtlCreateUserThread` | Native, stable | Used internally by CSRSS; documented alternative |
 
-## Pré-requisitos
+## Prerequisites
 
-- Handle com direitos suficientes sobre o processo alvo (mesmo usuário e integridade, ou `SeDebugPrivilege` para alvos de outros contextos)
-- Alvo e injetor na mesma arquitetura (x64 → x64)
+- A handle with sufficient rights over the target process (same user and integrity level, or `SeDebugPrivilege` for targets in other contexts)
+- Target and injector on the same architecture (x64 → x64)
 
-## Artefatos observáveis
+## Observable artifacts
 
-- Thread criada com start address fora de módulo mapeado (imagem)
-- Região de memória RWX (ou RW → RX) não pertencente a módulo
+- Thread created with a start address outside any mapped module (image)
+- RWX (or RW → RX) memory region not belonging to a module
 - Sysmon: Event ID 8 (CreateRemoteThread), Event ID 10 (ProcessAccess)
 
-## Notas de lab
+## Lab notes
 
-- Usar o processo dummy do lab como alvo
-- Comparar lado a lado: variante WinAPI vs. Native no mesmo snapshot
+- Use the lab dummy process as the target
+- Compare side by side: WinAPI vs. Native variant on the same snapshot

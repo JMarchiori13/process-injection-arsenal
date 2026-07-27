@@ -1,39 +1,39 @@
 # T1055 — APC Injection
 
-Injeção via Asynchronous Procedure Calls: enfileirar código para execução no contexto de uma thread existente do processo alvo.
+Injection via Asynchronous Procedure Calls: queueing code for execution in the context of an existing thread of the target process.
 
-## Conceito
+## Concept
 
-Toda thread Windows possui uma fila de APCs. Uma APC enfileirada executa quando a thread entra em **estado alertável** (ex.: `SleepEx`, `WaitForSingleObjectEx` com `bAlertable=TRUE`). A injeção explora isso para executar código sem criar thread nova.
+Every Windows thread has an APC queue. A queued APC executes when the thread enters an **alertable state** (e.g., `SleepEx`, `WaitForSingleObjectEx` with `bAlertable=TRUE`). Injection abuses this to run code without creating a new thread.
 
-## Variantes documentadas
+## Documented variants
 
-| Variante | Alvo | Observações |
+| Variant | Target | Notes |
 |---|---|---|
-| `QueueUserAPC` | Thread existente em estado alertável | Requer thread alertável no alvo; menos confiável |
-| Early Bird APC | Thread de processo recém-criado (suspenso) | Cria processo suspenso, injeta, enfileira APC antes da thread iniciar — execução garantida no resume |
-| `NtQueueApcThread` | Native API | Mesma operação via ntdll, contorna hooks WinAPI |
+| `QueueUserAPC` | Existing thread in an alertable state | Requires an alertable thread in the target; less reliable |
+| Early Bird APC | Thread of a newly created (suspended) process | Creates a suspended process, injects, queues the APC before the thread starts — guaranteed execution on resume |
+| `NtQueueApcThread` | Native API | Same operation via ntdll, bypasses WinAPI hooks |
 
-## Fluxo early bird
+## Early bird flow
 
 ```
-CreateProcess(alvo, CREATE_SUSPENDED)
+CreateProcess(target, CREATE_SUSPENDED)
   └─ VirtualAllocEx + WriteProcessMemory (shellcode)
-       └─ QueueUserAPC(shellcode, thread principal)
-            └─ ResumeThread → APC executa no início da thread
+       └─ QueueUserAPC(shellcode, main thread)
+            └─ ResumeThread → APC executes at thread start
 ```
 
-## Pré-requisitos
+## Prerequisites
 
-- Para APC em processo existente: thread alertável (raridade em processos GUI; comum em processos com waits)
-- Para early bird: nenhum requisito especial — você controla a criação do processo
+- For APC into an existing process: an alertable thread (rare in GUI processes; common in processes with waits)
+- For early bird: no special requirement — you control process creation
 
-## Artefatos observáveis
+## Observable artifacts
 
-- Ausência de Event ID 8 (nenhum CreateRemoteThread)
-- Região de memória RWX/RX não-módulo no processo alvo
-- Early bird: processo criado suspenso + escrita remota antes do primeiro resume
+- Absence of Event ID 8 (no CreateRemoteThread)
+- RWX/RX non-module memory region in the target process
+- Early bird: process created suspended + remote write before the first resume
 
-## Notas de lab
+## Lab notes
 
-- Payload padrão (MessageBox) — em APC de thread existente, usar thread do processo dummy com `SleepEx` alertável
+- Standard payload (MessageBox) — for APC into an existing thread, use a dummy process thread with alertable `SleepEx`

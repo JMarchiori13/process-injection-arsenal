@@ -1,17 +1,17 @@
-# src/image-tampering — PoCs de Hollowing, Stomping e Mapping
+# src/image-tampering — Hollowing, Stomping and Mapping PoCs
 
-📖 Notas de pesquisa: [docs/image-tampering.md](../../docs/image-tampering.md)
+📖 Research notes: [docs/image-tampering.md](../../docs/image-tampering.md)
 
-## Experimentos planejados
+## Planned experiments
 
-| # | Experimento | Técnica | Observação |
+| # | Experiment | Technique | Note |
 |---|---|---|---|
-| I1 | Process hollowing | Unmap + rewrite da imagem em processo suspenso | Hospedeiro: cópia de `notepad.exe` no lab |
-| I2 | Module stomping | Overwrite de `.text` de DLL legítima do lab | Comparar: memória backed por imagem |
-| I3 | Mapping injection | `NtCreateSection` + map local/remoto | Alternativa sem `WriteProcessMemory` |
+| I1 | Process hollowing | Unmap + rewrite of the image in a suspended process | Host: a copy of `notepad.exe` in the lab |
+| I2 | Module stomping | `.text` overwrite of a legitimate lab DLL | Compare: image-backed memory |
+| I3 | Mapping injection | `NtCreateSection` + local/remote map | Alternative without `WriteProcessMemory` |
 
-## Convenções
+## Conventions
 
-- Linguagem: C (MSVC, x64)
-- I1 é a PoC mais frágil do repositório — validar alinhamento de seções e relocations da imagem injetada
-- Payload: MessageBox padrão do projeto (imagem PE mínima para I1)
+- Language: C (MSVC, x64)
+- I1 is the most fragile PoC in the repository — validate section alignment and relocations of the injected image
+- Payload: project-standard MessageBox (minimal PE image for I1)

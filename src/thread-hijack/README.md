@@ -1,18 +1,18 @@
-# src/thread-hijack — PoCs de Thread Hijacking
+# src/thread-hijack — Thread Hijacking PoCs
 
-📖 Notas de pesquisa: [docs/thread-hijacking.md](../../docs/thread-hijacking.md)
+📖 Research notes: [docs/thread-hijacking.md](../../docs/thread-hijacking.md)
 
-## Experimentos planejados
+## Planned experiments
 
-| # | Experimento | Variante | Observação |
+| # | Experiment | Variant | Note |
 |---|---|---|---|
-| T1 | Hijack destrutivo | `SuspendThread` → redirect RIP → `ResumeThread` | Baseline; thread não retorna |
-| T2 | Hijack com restauração | Stub salva registradores, executa payload, restaura contexto | Thread sobrevive — comparar estabilidade |
-| T3 | Seleção de thread | Enumerar threads do alvo, heurística de escolha (wait estável) | Documentar critérios |
+| T1 | Destructive hijack | `SuspendThread` → redirect RIP → `ResumeThread` | Baseline; thread does not return |
+| T2 | Hijack with restoration | Stub saves registers, runs payload, restores context | Thread survives — compare stability |
+| T3 | Thread selection | Enumerate target threads, selection heuristic (stable wait) | Document criteria |
 
-## Convenções
+## Conventions
 
-- Linguagem: C (MSVC, x64)
-- Alvo: thread secundária do dummy em wait estável
-- Validar T2 com x64dbg: contexto antes/depois deve ser idêntico (exceto execução do payload)
-- Payload: MessageBox padrão do projeto
+- Language: C (MSVC, x64)
+- Target: a secondary dummy thread in a stable wait
+- Validate T2 with x64dbg: context before/after must be identical (except for payload execution)
+- Payload: project-standard MessageBox

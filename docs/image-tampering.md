@@ -1,53 +1,53 @@
-# T1055.012 — Image Tampering: Hollowing, Stomping e Mapping
+# T1055.012 — Image Tampering: Hollowing, Stomping and Mapping
 
-Família de técnicas que manipulam a **imagem** do processo — substituindo, corrompendo ou mapeando código no lugar de módulos legítimos.
+A family of techniques that manipulate the process **image** — replacing, corrupting, or mapping code in place of legitimate modules.
 
 ## Process Hollowing
 
 ```
-CreateProcess(legítimo, CREATE_SUSPENDED)
-  └─ NtUnmapViewOfSection (desmapear a imagem original)
-       └─ VirtualAllocEx (na base original)
-            └─ WriteProcessMemory (headers + seções da nova imagem)
-                 └─ SetThreadContext (entrypoint da nova imagem)
+CreateProcess(legitimate, CREATE_SUSPENDED)
+  └─ NtUnmapViewOfSection (unmap the original image)
+       └─ VirtualAllocEx (at the original base)
+            └─ WriteProcessMemory (headers + sections of the new image)
+                 └─ SetThreadContext (new image entrypoint)
                       └─ ResumeThread
 ```
 
-Resultado: processo com nome/caminho de binário legítimo executando imagem completamente diferente.
+Result: a process with the name/path of a legitimate binary executing a completely different image.
 
 ## Module Stomping (Module Overloading)
 
-- Carregar (ou usar) uma DLL legítima no processo alvo
-- Sobrescrever a seção `.text` do módulo com shellcode
-- Executar via thread no endereço do módulo "pisoteado"
-- Vantagem: código executa a partir de memória **backed por imagem em disco** — foge de heurísticas de "memória privada executável"
+- Load (or reuse) a legitimate DLL in the target process
+- Overwrite the module's `.text` section with shellcode
+- Execute via a thread at the "stomped" module address
+- Advantage: code runs from memory **backed by an on-disk image** — evades "executable private memory" heuristics
 
 ## Section Mapping Injection
 
 ```
 NtCreateSection (PAGE_EXECUTE_READWRITE)
-  ├─ NtMapViewOfSection (no processo local — escreve shellcode)
-  └─ NtMapViewOfSection (no processo remoto — executável)
-       └─ CreateRemoteThread / hijack / APC na view remota
+  ├─ NtMapViewOfSection (into the local process — write shellcode)
+  └─ NtMapViewOfSection (into the remote process — executable)
+       └─ CreateRemoteThread / hijack / APC on the remote view
 ```
 
-Alternativa ao VirtualAllocEx + WriteProcessMemory: uma única seção compartilhada entre os dois processos.
+An alternative to VirtualAllocEx + WriteProcessMemory: a single section shared between both processes.
 
-## Comparativo
+## Comparison
 
-| Técnica | Imagem em disco? | Cria thread? | Complexidade |
+| Technique | On-disk image? | Creates thread? | Complexity |
 |---|---|---|---|
-| Hollowing | Sim (nome legítimo) | Não (thread do processo criado) | Alta |
-| Module stomping | Sim (módulo legítimo) | Depende do disparo | Média |
-| Mapping injection | Não (seção não-backed) | Depende do disparo | Média |
+| Hollowing | Yes (legitimate name) | No (thread of the created process) | High |
+| Module stomping | Yes (legitimate module) | Depends on the trigger | Medium |
+| Mapping injection | No (non-backed section) | Depends on the trigger | Medium |
 
-## Artefatos observáveis
+## Observable artifacts
 
-- Hollowing: imagem do processo ≠ conteúdo em disco (comparação de hash), PEB vs. memória divergentes
-- Stomping: módulo assinado com `.text` modificada (falha de verificação de assinatura em memória)
-- Mapping: seções compartilhadas executáveis entre processos distintos
+- Hollowing: process image ≠ on-disk content (hash comparison), PEB vs. memory divergence
+- Stomping: signed module with modified `.text` (in-memory signature verification failure)
+- Mapping: executable sections shared between distinct processes
 
-## Notas de lab
+## Lab notes
 
-- Hollowing: usar binário legítimo próprio do lab como "hospedeiro" (ex.: cópia de `notepad.exe`)
-- Stomping: DLL do próprio lab como vítima do overwrite
+- Hollowing: use the lab's own legitimate binary as the "host" (e.g., a copy of `notepad.exe`)
+- Stomping: a lab-owned DLL as the overwrite victim
