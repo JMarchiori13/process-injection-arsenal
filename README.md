@@ -6,13 +6,13 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 > **⚠️ Disclaimer**
-> This repository is an **offensive security research** project intended exclusively for **isolated labs** and **authorized operations** (red team engagements with contractual scope and signed Rules of Engagement). Using any technique documented here against systems without explicit authorization is a crime (Brazil — Lei nº 12.737/2012; United States — CFAA; equivalent legislation in other jurisdictions). The author assumes no liability for misuse.
+> This repository is an **offensive security research** project intended exclusively for **isolated labs** and **authorized operations** (red team engagements with contractual scope and signed Rules of Engagement). Using any technique documented here against systems without explicit authorization is a crime (Brazil: Lei nº 12.737/2012; United States: CFAA; equivalent legislation in other jurisdictions). The author assumes no liability for misuse.
 
 ## Objective
 
-A structured study of **Process Injection** techniques ([MITRE ATT&CK T1055](https://attack.mitre.org/techniques/T1055/)) on Windows. Each technique is implemented as a lab PoC with the same harmless payload (MessageBox), allowing direct comparison of behavior, prerequisites, and artifacts.
+A structured study of Process Injection techniques ([MITRE ATT&CK T1055](https://attack.mitre.org/techniques/T1055/)) on Windows. Each technique is implemented as a lab PoC with the same harmless payload (MessageBox), allowing direct comparison of behavior, prerequisites, and artifacts.
 
-## Table of Contents
+## Table of contents
 
 - [Project structure](#project-structure)
 - [Modules](#modules)
@@ -51,11 +51,11 @@ process-injection-arsenal/
 
 ## Payload convention
 
-Every PoC executes the **same harmless payload**: a minimal shellcode that displays `MessageBoxA("process-injection-arsenal lab")`. This ensures a fair comparison across techniques and keeps the project clearly educational.
+Every PoC executes the same harmless payload: a minimal shellcode that displays `MessageBoxA("process-injection-arsenal lab")`. This ensures a fair comparison across techniques and keeps the project clearly educational.
 
 ## Lab
 
-See **[lab/setup.md](lab/setup.md)** — isolated Windows VM, snapshots per hardening stage, and a standard per-experiment procedure.
+See [lab/setup.md](lab/setup.md): isolated Windows VM, snapshots per hardening stage, and a standard per-experiment procedure.
 
 ## Roadmap
 
@@ -84,12 +84,12 @@ See **[lab/setup.md](lab/setup.md)** — isolated Windows VM, snapshots per hard
 
 ## References
 
-- [MITRE ATT&CK — Process Injection (T1055)](https://attack.mitre.org/techniques/T1055/)
-- [Red Team Notes — ired.team](https://www.ired.team/offensive-security/code-injection-process-injection)
-- [Elastic Security — Injection research](https://www.elastic.co/security-labs)
+- [MITRE ATT&CK: Process Injection (T1055)](https://attack.mitre.org/techniques/T1055/)
+- [Red Team Notes: ired.team](https://www.ired.team/offensive-security/code-injection-process-injection)
+- [Elastic Security: injection research](https://www.elastic.co/security-labs)
 - [MalDev Academy](https://maldevacademy.com/)
-- MS Learn — Win32 process/thread APIs, NT native API (unofficial documentation: [ntdoc.m417z.com](https://ntdoc.m417z.com/))
+- MS Learn: Win32 process/thread APIs, NT native API (unofficial documentation: [ntdoc.m417z.com](https://ntdoc.m417z.com/))
 
 ## License
 
-MIT — see [LICENSE](LICENSE). The disclaimer above remains in effect regardless of the license.
+MIT. See [LICENSE](LICENSE). The disclaimer above remains in effect regardless of the license.
